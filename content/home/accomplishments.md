@@ -33,4 +33,12 @@ item:
   organization_url: 
   title: Financial Market Analysis
   url: ""
+- certificate_url: 
+  date_end: ""
+  date_start: "2019-10-30"
+  description: ""
+  organization: Ministry of Finance Indonesia
+  organization_url: 
+  title: Runner Up - Best Employee of the Year (2019)
+  url: ""
 ---

@@ -27,16 +27,26 @@ date_format: Jan 2006
 experience:
 - company: Ministry of Finance
   company_url: ""
-  date_end: ""
+  date_end: "2012-01-02"
   date_start: "2009-11-30"
   description: |-
     Responsibilities include:
-    * Planning
-    * Analysis
-    * Trading
+    * Budget Planning
+    * Cash Forecasting
   location: Jakarta
-  title: Senior Bonds Dealer
-- company: Maxwell Corp.
+  title: Budget Planner
+- company: Ministry of Finance
+  company_url: ""
+  date_end: ""
+  date_start: "2012-01-02"
+  description: |-
+    Responsibilities include:
+    * Issuance Planning
+    * Market Analysis
+    * Bonds Trading
+  location: Jakarta
+  title: Bonds Dealer
+- company: Maxwell Software Development.
   company_url: ""
   date_end: ""
   date_start: "2019-06-10"

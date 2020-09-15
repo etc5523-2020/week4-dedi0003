@@ -1,0 +1,108 @@
+---
+title: Indonesia's Deadly Covid-19
+author: Dea Avega Editya
+date: '2020-09-14'
+slug: indonesia-s-dangerous-covid-19
+categories: []
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-09-14T09:54:44+10:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+bibliography: references.bib
+nocite: |
+  @tidyverse, @lubridate, @dplyr, @plotly, @ggplot, @zoo, @ggrepel, @patch
+---
+
+
+
+<center>
+<img src="https://bpbd.probolinggokab.go.id/assets/frontend/images/id.gif" title="fig:" alt="Indonesian Flag (https://bpbd.probolinggokab.go.id)" />
+</center>
+<div id="a-brief-background-story" class="section level2">
+<h2>A Brief Background Story <svg style="height:0.8em;top:.04em;position:relative;fill:red;" viewBox="0 0 352 512"><path d="M96.06 454.35c.01 6.29 1.87 12.45 5.36 17.69l17.09 25.69a31.99 31.99 0 0 0 26.64 14.28h61.71a31.99 31.99 0 0 0 26.64-14.28l17.09-25.69a31.989 31.989 0 0 0 5.36-17.69l.04-38.35H96.01l.05 38.35zM0 176c0 44.37 16.45 84.85 43.56 115.78 16.52 18.85 42.36 58.23 52.21 91.45.04.26.07.52.11.78h160.24c.04-.26.07-.51.11-.78 9.85-33.22 35.69-72.6 52.21-91.45C335.55 260.85 352 220.37 352 176 352 78.61 272.91-.3 175.45 0 73.44.31 0 82.97 0 176zm176-80c-44.11 0-80 35.89-80 80 0 8.84-7.16 16-16 16s-16-7.16-16-16c0-61.76 50.24-112 112-112 8.84 0 16 7.16 16 16s-7.16 16-16 16z"/></svg></h2>
+<p>In this blog post, I would like to write about Covid-19 cases in my own country Indonesia. Indonesia has a quite horrible story since many people are death from this pandemic. Among those who died are some of my office colleagues who are still relatively young.</p>
+<p>Because of the terrible situation, the Government of Indonesia instructs people to stay at home and workers are discouraged to go to their offices unless it is unavoidable. Government’s offices (including my office) regulate “25% rule”, which means that 25% of employees are required to come into office with schedule are shifted among low risk-employees.
+Low risk is described as not showing symptoms, young (under 40 years old) and not having other illness (i.e. hypertension and diabetes).</p>
+<p>Unfortunately, many people believe that workers (mainly private workers) still go to their work places despite the instruction for working from home. This later triggers some new clusters of covid-19 especially in the capital-Jakarta.</p>
+<p>Hence, in this blog I would like to analyze covid-19 cases in Indonesia, both its daily trends of new cases, recovered and deaths as well as workers’ mobility derived from google’s mobility trend.</p>
+</div>
+<div id="data-description" class="section level2">
+<h2>Data Description <svg style="height:0.8em;top:.04em;position:relative;fill:black;" viewBox="0 0 384 512"><path d="M224 136V0H24C10.7 0 0 10.7 0 24v464c0 13.3 10.7 24 24 24h336c13.3 0 24-10.7 24-24V160H248c-13.2 0-24-10.8-24-24zm64 236c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-64c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12v8zm0-72v8c0 6.6-5.4 12-12 12H108c-6.6 0-12-5.4-12-12v-8c0-6.6 5.4-12 12-12h168c6.6 0 12 5.4 12 12zm96-114.1v6.1H256V0h6.1c6.4 0 12.5 2.5 17 7l97.9 98c4.5 4.5 7 10.6 7 16.9z"/></svg></h2>
+<p>Like my previous blog post, I use covid-19 data set from tidycovid package <span class="citation">Gassen (2020)</span>, which includes information about numbers of confirmed cases, deaths, recovered and google mobility trend. Data of covid-19 in Indonesia ranges from January 22, 2020 until September 11th, 2020. Google mobilty trends that used are related to community’s mobility at workplaces and transportation hubs (stations).</p>
+</div>
+<div id="horrible-cases-and-still-increasing" class="section level2">
+<h2>Horrible Cases and Still Increasing <svg style="height:0.8em;top:.04em;position:relative;fill:red;" viewBox="0 0 512 512"><path d="M256 0C114.6 0 0 100.3 0 224c0 70.1 36.9 132.6 94.5 173.7 9.6 6.9 15.2 18.1 13.5 29.9l-9.4 66.2c-1.4 9.6 6 18.2 15.7 18.2H192v-56c0-4.4 3.6-8 8-8h16c4.4 0 8 3.6 8 8v56h64v-56c0-4.4 3.6-8 8-8h16c4.4 0 8 3.6 8 8v56h77.7c9.7 0 17.1-8.6 15.7-18.2l-9.4-66.2c-1.7-11.7 3.8-23 13.5-29.9C475.1 356.6 512 294.1 512 224 512 100.3 397.4 0 256 0zm-96 320c-35.3 0-64-28.7-64-64s28.7-64 64-64 64 28.7 64 64-28.7 64-64 64zm192 0c-35.3 0-64-28.7-64-64s28.7-64 64-64 64 28.7 64 64-28.7 64-64 64z"/></svg></h2>
+<div class="figure" style="text-align: center"><span id="fig:daily"></span>
+<img src="/post/2020-09-14-indonesia-s-dangerous-covid-19.en_files/figure-html/daily-1.png" alt="Average Daily Cases in Indonesia as of Sep 11, 2020" width="672" />
+<p class="caption">
+Figure 1: Average Daily Cases in Indonesia as of Sep 11, 2020
+</p>
+</div>
+<p>From figure <a href="#fig:daily">1</a> we see that new daily cases are still increasing from the first infection on January 22th, 2020 until current days. The latest recorded number on September 11th, 2020 is 3.343 daily new cases. Fortunately, number of recovered patients also increases with the latest record is 2.291 people recovered from the illness. The most sad story about covid-19 in Indonesia is about its daily deaths which recorded as high as 102 on September 11th, 2020.</p>
+<div class="figure" style="text-align: center"><span id="fig:death"></span>
+<img src="/post/2020-09-14-indonesia-s-dangerous-covid-19.en_files/figure-html/death-1.png" alt="Increasing Number of Daily Deaths" width="672" />
+<p class="caption">
+Figure 2: Increasing Number of Daily Deaths
+</p>
+</div>
+<p>Looking more clearly on daily trend of deaths on figure <a href="#fig:death">2</a>, it is very scary to see that the trend is actually increasing since the beginning of the pandemic. The figure also show several spots in which the daily deaths pass 100 tally.
+Recent news reported new finding of covid-19’s behavior that makes this disease very dangerous and deadly. Some fatal patients are believed to caught the disease without feel any symptoms, however the oxygen level in their body is dropped dramatically which finally cause their deaths. This new dangerous behavior is called “Happy Hypoxia”.</p>
+</div>
+<div id="do-the-workers-really-work-from-home" class="section level2">
+<h2>Do the Workers really Work from Home?</h2>
+<p>In this section, I would like to see the effect of government suggestion to work from home (WFH) on workers. It is believed that many business sectors in Indonesia are not really flexible in terms of moving working spaces into online. There are several reasons underneath the situation, for instance not many people have access to good internet especially broadband which provides unlimited internet bandwidth. Many people are still relying on their mobile internet service which is not unlimited and much more expensive than the broadband. Some business characteristics also require workers to do their job onsite.</p>
+<div class="figure" style="text-align: center"><span id="fig:mobile"></span>
+<img src="/post/2020-09-14-indonesia-s-dangerous-covid-19.en_files/figure-html/mobile-1.png" alt="Workplaces and Stations Mobility" width="672" />
+<p class="caption">
+Figure 3: Workplaces and Stations Mobility
+</p>
+</div>
+<p>Taking advantages from Google mobility trends that record people’s movement at several spots related to workplaces as well as transportation hubs (stations), we will check on the previous assumption that many workers are still going to workplaces despite of the Government’s instruction.</p>
+<p>According to average mobility trend as shown in figure <a href="#fig:mobile">3</a>, there were actualy very huge drops in mobility both at workplaces and stations which indicate that many workers seems to start working at home during early pandemic in March 2020. However, as can be seen from the figure, starting from the end of May 2020 the trends are increasing up to recent. Mobility at workplaces is still lower than the start of the pandemic, but it is now only reduced by 20%, which means that <strong>80% employees are possibly still going to their offices</strong>.</p>
+<p>On the other hand, mobility at transportation hubs (i.e. bus terminals and train stations) has fallen deeper than workplaces mobility and now is showing an increasing trend although not as high as workplaces trend. Hence, it can be a hint that <strong>among those who are working from offices, some of them are shifting from using public transportation to more private alternatives such as taxi or their own vehicles</strong>.</p>
+<center>
+<img src="https://img.beritasatu.com/cache/beritasatu/600x350-2/1586874755.jpg" title="fig:" alt="Workers use train to work (source: www.beritasatu.com)" />
+</center>
+<center>
+Less Crowded Workers in Train (source: beritasatu.com)
+</center>
+</div>
+<div id="references" class="section level2 unnumbered">
+<h2>References</h2>
+<div id="refs" class="references">
+<div id="ref-tidycovid">
+<p>Gassen, Joachim. 2020. <em>Tidycovid19: Download, Tidy and Visualize Covid-19 Related Data</em>.</p>
+</div>
+<div id="ref-lubridate">
+<p>Grolemund, Garrett, and Hadley Wickham. 2011. “Dates and Times Made Easy with lubridate.” <em>Journal of Statistical Software</em> 40 (3): 1–25. <a href="http://www.jstatsoft.org/v40/i03/">http://www.jstatsoft.org/v40/i03/</a>.</p>
+</div>
+<div id="ref-patch">
+<p>Pedersen, Thomas Lin. 2020. <em>Patchwork: The Composer of Plots</em>. <a href="https://CRAN.R-project.org/package=patchwork">https://CRAN.R-project.org/package=patchwork</a>.</p>
+</div>
+<div id="ref-plotly">
+<p>Sievert, Carson. 2020. <em>Interactive Web-Based Data Visualization with R, Plotly, and Shiny</em>. Chapman; Hall/CRC. <a href="https://plotly-r.com">https://plotly-r.com</a>.</p>
+</div>
+<div id="ref-ggrepel">
+<p>Slowikowski, Kamil. 2020. <em>Ggrepel: Automatically Position Non-Overlapping Text Labels with ’Ggplot2’</em>. <a href="https://CRAN.R-project.org/package=ggrepel">https://CRAN.R-project.org/package=ggrepel</a>.</p>
+</div>
+<div id="ref-ggplot">
+<p>Wickham, Hadley. 2016. <em>Ggplot2: Elegant Graphics for Data Analysis</em>. Springer-Verlag New York. <a href="https://ggplot2.tidyverse.org">https://ggplot2.tidyverse.org</a>.</p>
+</div>
+<div id="ref-tidyverse">
+<p>Wickham, Hadley, Mara Averick, Jennifer Bryan, Winston Chang, Lucy D’Agostino McGowan, Romain François, Garrett Grolemund, et al. 2019. “Welcome to the tidyverse.” <em>Journal of Open Source Software</em> 4 (43): 1686. <a href="https://doi.org/10.21105/joss.01686">https://doi.org/10.21105/joss.01686</a>.</p>
+</div>
+<div id="ref-dplyr">
+<p>Wickham, Hadley, Romain François, Lionel Henry, and Kirill Müller. 2020. <em>Dplyr: A Grammar of Data Manipulation</em>. <a href="https://CRAN.R-project.org/package=dplyr">https://CRAN.R-project.org/package=dplyr</a>.</p>
+</div>
+<div id="ref-zoo">
+<p>Zeileis, Achim, and Gabor Grothendieck. 2005. “Zoo: S3 Infrastructure for Regular and Irregular Time Series.” <em>Journal of Statistical Software</em> 14 (6): 1–27. <a href="https://doi.org/10.18637/jss.v014.i06">https://doi.org/10.18637/jss.v014.i06</a>.</p>
+</div>
+</div>
+</div>

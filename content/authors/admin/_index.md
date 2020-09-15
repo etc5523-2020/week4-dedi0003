@@ -1,9 +1,9 @@
 ---
-bio: My research interests include distributed robotics, mobile computing and programmable matter.
+bio: Learning statistics and data visualization to guide a better policy decision.
 education:
   courses:
   - course: Master's in Business Analytics
-    institution: Melbourne Business School
+    institution: Monash Business School
     year: 2021
   - course: Bachelor's in Economics
     institution: STIE Muhammadiyah Jakarta
@@ -20,9 +20,9 @@ interests:
 - Data Visualization
 - Machine Learning
 organizations:
-- name: Ministry of Finance
-  url: https://www.kemenkeu.go.id/
-role: Sovereign Bonds Dealer
+- name: Monash Business School
+  url: https://www.monash.edu/
+role: Business Analytics Student
 social:
 - icon: twitter
   icon_pack: fab

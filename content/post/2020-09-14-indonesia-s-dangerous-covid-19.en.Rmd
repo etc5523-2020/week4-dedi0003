@@ -1,0 +1,200 @@
+---
+title: Indonesia's Deadly Covid-19
+author: Dea Avega Editya
+date: '2020-09-14'
+slug: indonesia-s-dangerous-covid-19
+categories: []
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-09-14T09:54:44+10:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+bibliography: references.bib
+nocite: |
+  @tidyverse, @lubridate, @dplyr, @plotly, @ggplot, @zoo, @ggrepel, @patch
+---
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, fig.align = "center")
+
+```
+
+```{r load, echo = FALSE, warning=FALSE, message= FALSE}
+library(here)
+library(tidycovid19)
+library(lubridate)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(zoo)
+library(patchwork)
+library(fontawesome)
+library(ggrepel)
+library(ggthemes)
+
+# load data of Korea
+
+indo <- download_merged_data(cached = TRUE, silent = TRUE) %>% 
+  filter(iso3c == "IDN")
+
+```
+
+<center>![Indonesian Flag (https://bpbd.probolinggokab.go.id)](https://bpbd.probolinggokab.go.id/assets/frontend/images/id.gif)</center>
+
+## A Brief Background Story `r fa("lightbulb", fill = "red")`
+
+In this blog post, I would like to write about Covid-19 cases in my own country Indonesia. Indonesia has a quite horrible story since many people are death from this pandemic. Among those who died are some of my office colleagues who are still relatively young. 
+
+Because of the terrible situation, the Government of Indonesia instructs people to stay at home and workers are discouraged to go to their offices unless it is unavoidable. Government's offices (including my office) regulate "25% rule", which means that 25% of employees are required to come into office with schedule are shifted among low risk-employees.
+Low risk is described as not showing symptoms, young (under 40 years old) and not having other illness (i.e. hypertension and diabetes).
+
+Unfortunately, many people believe that workers (mainly private workers) still go to their work places despite the instruction for working from home. This later triggers some new clusters of covid-19 especially in the capital-Jakarta.
+
+Hence, in this blog I would like to analyze covid-19 cases in Indonesia, both its daily trends of new cases, recovered and deaths as well as workers' mobility derived from google's mobility trend.  
+
+## Data Description `r fa("file-alt", fill = "black")`
+
+Like my previous blog post, I use covid-19 data set from tidycovid package @tidycovid, which includes information about numbers of confirmed cases, deaths, recovered and google mobility trend. Data of covid-19 in Indonesia ranges from January 22, 2020 until September 11th, 2020. Google mobilty trends that used are related to community's mobility at workplaces and transportation hubs (stations).
+  
+## Horrible Cases and Still Increasing `r fa("skull", fill = "red")`  
+  
+```{r daily, fig.cap="Average Daily Cases in Indonesia as of Sep 11, 2020"}
+plot <- indo %>%
+  mutate(
+  new_cases = confirmed - lag(confirmed),
+  ave_new_cases = round(rollmean(new_cases, 7, na.pad=TRUE, align="right")),
+  new_deaths = deaths - lag(deaths),
+  ave_new_deaths = round(rollmean(new_deaths, 7, na.pad=TRUE, align="right")), 
+  new_recovered = recovered - lag(recovered),
+  ave_new_recovered = round(rollmean(new_recovered, 7, na.pad=TRUE, align="right"))
+  ) %>%
+  filter(!is.na(new_cases), !is.na(ave_new_cases), !is.na(new_deaths), !is.na(ave_new_deaths), !is.na(new_recovered), !is.na(ave_new_recovered))
+
+# plot
+plot %>%   
+ggplot(aes(x = date)) +
+  geom_bar(aes(y = new_cases), stat = "identity", fill = "#ff6d57", alpha = 0) +
+  geom_line(aes(y = ave_new_cases, color ="Avg Confirmed"), size = 1.2) +
+  geom_line(aes(y = ave_new_deaths, color ="Avg Death"), size = 1.2)+
+  geom_line(aes(y = ave_new_recovered, color ="Avg Recovered"), size = 1.2)+
+  # geom_text_repel(aes(y = ave_new_recovered, label = ifelse(new_recovered == max(new_recovered), max(ave_new_recovered), "")), point.padding = 0.2,
+  #   nudge_x = .15,
+  #   nudge_y = .5)+
+  
+  geom_text_repel(aes(y = ave_new_cases, label = ifelse(date == '2020-09-11', ave_new_cases, "")), point.padding = 0.2,
+    nudge_x = .15,
+    nudge_y = .5)+
+  theme_minimal()+
+  # geom_text_repel(aes(y = ave_new_deaths, label = ifelse(new_deaths == max(new_deaths), max(ave_new_deaths), "")), point.padding = 0.2,
+  #   nudge_x = .15,
+  #   nudge_y = .5)+
+  
+  geom_text_repel(aes(y = ave_new_deaths, label = ifelse(date == '2020-09-11', ave_new_deaths, "")), point.padding = 0.2,
+    nudge_x = .15,
+    nudge_y = .5)+
+  
+  geom_text_repel(aes(y = ave_new_recovered, label = ifelse(date == '2020-09-11', ave_new_recovered, "")), point.padding = 0.2,
+    nudge_x = .15,
+    nudge_y = .5)+
+  
+  theme_economist()+
+  ylab("New Cases")+
+  xlab("Date")+
+  scale_x_date(date_breaks="1 month", date_labels="%Y/%m")+
+   scale_color_manual(values = c('Avg Confirmed' = 'darkblue',
+    'Avg Death' = 'red', 'Avg Recovered' = 'green' )) +
+  labs(color = 'Trend')
+
+```
+
+From figure \@ref(fig:daily) we see that new daily cases are still increasing from the first infection on January 22th, 2020 until current days. The latest recorded number on September 11th, 2020 is 3.343 daily new cases. Fortunately, number of recovered patients also increases with the latest record is 2.291 people recovered from the illness. The most sad story about covid-19 in Indonesia is about its daily deaths which recorded as high as 102 on September 11th, 2020.
+
+```{r death, fig.cap="Increasing Number of Daily Deaths"}
+library(emojifont)
+load.fontawesome()
+
+ggplot(plot, aes(x = date)) +
+  geom_bar(aes(y = new_deaths), stat = "identity", fill = "#ff6d57", alpha = 0.5) +
+  geom_line(aes(y = ave_new_deaths, color ="Avg Death"), size = 1.2)+
+  # geom_label( 
+  #   data=plot %>% filter(ave_new_deaths > 100), # Filter data first
+  #   aes(y = ave_new_deaths, label = new_deaths), label.padding = unit(0.1, "lines"), # Rectangle size around label
+  #   label.size = 0.1,
+  #   color = "black", alpha = 0.1
+  # )+
+  theme_economist()+
+  ylab("New Deaths")+
+  xlab("Date")+
+  scale_x_date(date_breaks="1 month", date_labels="%Y/%m")+
+   scale_color_manual(values = c('Avg Confirmed' = 'darkblue',
+    'Avg Death' = 'red')) +
+  labs(color = 'Line Trend')+
+  ggtitle("Daily Average Deaths in Indonesia")+
+  geom_text_repel(aes(y = ave_new_deaths, label = ifelse(ave_new_deaths >= 100, ave_new_deaths, "")), point.padding = 0.2,
+    nudge_x = .15,
+    nudge_y = .5)
+```
+
+
+```{r,include=FALSE}
+
+plot$ave_new_deaths[227]/plot$ave_new_cases[227]*100
+```
+
+
+Looking more clearly on daily trend of deaths on figure \@ref(fig:death), it is very scary to see that the trend is actually increasing since the beginning of the pandemic. The figure also show several spots in which the daily deaths pass 100 tally. 
+Recent news reported new finding of covid-19's behavior that makes this disease very dangerous and deadly. Some fatal patients are believed to caught the disease without feel any symptoms, however the oxygen level in their body is dropped dramatically which finally cause their deaths. This new dangerous behavior is called "Happy Hypoxia". 
+
+## Do the Workers really Work from Home?
+
+In this section, I would like to see the effect of government suggestion to work from home (WFH) on workers. It is believed that many business sectors in Indonesia are not really flexible in terms of moving working spaces into online. There are several reasons underneath the situation, for instance not many people have access to good internet especially broadband which provides unlimited internet bandwidth. Many people are still relying on their mobile internet service which is not unlimited and much more expensive than the broadband. Some business characteristics also require workers to do their job onsite.
+
+```{r mobile, fig.cap="Workplaces and Stations Mobility"}
+
+mob_trend <- plot %>% 
+  mutate(
+  ave_work = round(rollmean(gcmr_workplaces, 7, na.pad=TRUE, align="right")),
+  ave_station = round(rollmean(gcmr_transit_stations, 7, na.pad=TRUE, align="right"))
+  ) %>% 
+  filter(!is.na(ave_work), !is.na(ave_station)) %>% 
+  mutate(date = date(date))
+  
+
+mob_trend %>% 
+ggplot(aes(x = date)) +
+  geom_line(aes(y = ave_work, color ="Workplaces"), size = 1.2) +
+  geom_line(aes(y = ave_station, color ="Stations"), size = 1.2)+
+  geom_text_repel(aes(y = ave_work, label = ifelse(date == '2020-09-08', ave_work, "")), point.padding = 0.2,
+    nudge_x = .15,
+    nudge_y = .5)+
+  geom_text_repel(aes(y = ave_station, label = ifelse(date == '2020-09-08', ave_station, "")), point.padding = 0.2,
+    nudge_x = .15,
+    nudge_y = .5)+
+  geom_text_repel(aes(y = ave_station, label = ifelse(date == "2020-05-02", "2020/05/02", "")), point.padding = 0.2,
+    nudge_x = .15,
+    nudge_y = .1)+
+  ylab("Average Weekly Mobility")+
+   geom_text_repel(aes(y = ave_work, label = ifelse(ave_work == min(ave_work), as.character(date), "")), point.padding = 0.2,
+    nudge_x = .15,
+    nudge_y = .1)+
+  ylab("Average Weekly Mobility")+
+  theme_economist()+
+  labs(color = 'Mobility Trend')
+
+```
+
+Taking advantages from Google mobility trends that record people's movement at several spots related to workplaces as well as transportation hubs (stations), we will check on the previous assumption that many workers are still going to workplaces despite of the Government's instruction.
+
+According to average mobility trend as shown in figure \@ref(fig:mobile), there were actualy very huge drops in mobility both at workplaces and stations which indicate that many workers seems to start working at home during early pandemic in March 2020. However, as can be seen from the figure, starting from the end of May 2020 the trends are increasing up to recent. Mobility at workplaces is still lower than the start of the pandemic, but it is now only reduced by 20%, which means that **80% employees are possibly still going to their offices**.
+
+On the other hand, mobility at transportation hubs (i.e. bus terminals and train stations) has fallen deeper than workplaces mobility and now is showing an increasing trend although not as high as workplaces trend. Hence, it can be a hint that **among those who are working from offices, some of them are shifting from using public transportation to more private alternatives such as taxi or their own vehicles**.
+
+<center>![Workers use train to work (source: www.beritasatu.com)](https://img.beritasatu.com/cache/beritasatu/600x350-2/1586874755.jpg)</center><center>Less Crowded Workers in Train (source: beritasatu.com)</center>
+
+## References

@@ -1,0 +1,410 @@
+---
+title: When Coffee Meet Covid
+author: Dea Avega Editya
+date: '2020-09-04'
+slug: when-coffee-meet-covid
+categories: []
+tags: []
+subtitle: 'a Story of South Korea'
+summary: ''
+authors: []
+lastmod: '2020-09-04T22:58:16+10:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+bibliography: references.bib
+nocite: |
+  @tidyverse, @lubridate, @dplyr, @plotly, @ggplot, @zoo, @formattable, @widget, @hw, @tool, @spark, @dt, @nyt1, @nyt2, @wash, @refinery, @diplomat
+---
+
+```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
+
+```
+
+```{r load, echo = FALSE, warning=FALSE, message= FALSE}
+library(plotly)
+library(tidycovid19)
+library(lubridate)
+library(dplyr)
+library(tidyverse)
+library(ggplot2)
+library(zoo)
+library(formattable)
+library(widgetframe)
+library(htmlwidgets)
+library(htmltools)
+library(sparkline)
+library(DT)
+library(fontawesome)
+
+# load data of Korea
+
+kor <- download_merged_data(cached = TRUE, silent = TRUE) %>% 
+  filter(iso3c == "KOR")
+
+```
+
+## A Brief Background Story `r fa("lightbulb", fill = "red")`
+
+In this blog article, I am interested to see covid-19's progress in "the drama country" South Korea, especially its reemergence after almost fully dissapeared in May 2020. The country is known to have its first covid-19 case back on January 20th, 2020.
+
+The South Korean Government took immediate action to curb the virus spread by imposing strict restriction in the country, with regulation on social distancing, prohibiting mass gathering as well as closing several public spaces like restaurants, school and religious services. The Government also took advantage of technology in order to trace contact of infections. The covid-19 cases was seems like almost fully diminished in May 2020, due to the Government's intervention. However, after the restriction was relaxed in early May, the virus is now coming back in a second wave of infection.  
+
+## Data Description `r fa("file-alt", fill = "black")`
+
+For convenience, I use covid-19 data set pulled up from tidycovid package @tidycovid. The data used in this article is covering numbers of confirmed cases, deaths, and recovered, as well as percentage of testing per population (testing regime) that deemed by the South Korean Government as a vital action to curb the pandemic in the country. 
+
+Using the same package, I also retrieve data of South Korean mobility provided by Google which related to leisure activity such as visiting restaurant/cafe during the period of January until August 2020, in order to analyze whether the activities has association with the reappearance of the virus.    
+
+## From Church to Coffee Shop `r fa("mug-hot", fill = "green")`
+
+It is reported that the first wave in South Korea was due to a gathering at [the Shincheonji Church of Jesus in Daegu](https://www.nytimes.com/2020/02/21/world/asia/south-korea-coronavirus-shincheonji.html). The suspect was a 61 years-old woman who is a regular member of the church. The woman is reported to spread the virus to at least other 15 people in an church event took place on **February, 20th**. A month later, thousands of people with connections to the church would test positive for the virus. According to [the washingtonpost](https://www.theguardian.com/world/2020/aug/23/how-south-koreas-evangelical-churches-found-themselves-at-the-heart-of-the-covid-crisis), the cluster at the Shincheonji church ended up with **5,080** related-cases, contribute to more than half of South Korea’s total cases at the moment.
+
+The latest outbreak which considered as **second wave** happened in mid August and was linked to some coffee shops. It is reported from [the diplomat](https://thediplomat.com/2019/11/south-koreas-coffee-craze/#:~:text=The%20Institute%20estimated%20that%20each,is%20also%20increasing%20every%20year) that South Korean are really a big fan of coffee with average consumption is three times bigger than the global average. While the strict restriction had been lifted, they could not resist to visit their favorite coffee shops. 
+
+Although many infections are linked to several cafes, the most infectious one was occurred at a **Starbucks** branch in Paju, a city north of Seoul. According to [refinery29.com](https://www.refinery29.com/en-us/2020/08/9986225/starbucks-covid-cases-paju-south-korea-masks), the Starbucks infections have been traced to a woman who sat on the second floor of the Paju branch on **August 8th** for around two hours. Despite this bad event, it is surprising to know that **four employees who were wearing KF-94 masks at the incident were all tested negative**.  
+
+This second wave was also amplified by another incident on **August 12th**, related to the Sarang Jeil Church in the south-eastern city of Daegu. After some of its members were tested positive, the case triggered a massive anti-government rally in Seoul conducted by the church's leader and members who accuse the government has fabricated the test result. The rally absolutely caused more infections in the capital. The church's leader was eventually arrested after being accused of hindering the virus response by hiding information about the church's members and gathering.
+
+The milestone events are summarized in the figure \@ref(fig:plot) below.
+
+
+```{r ,include = FALSE, warning=FALSE, message=FALSE, echo=FALSE}
+
+spot <- as.numeric(as.Date("2020-08-08"))
+spot1 <- as.numeric(as.Date("2020-02-20"))
+spot3 <- as.numeric(as.Date("2020-08-12"))
+lifted <- as.numeric(as.Date("2020-05-06"))
+
+
+
+plot <- kor %>%
+  mutate(
+  new_cases = confirmed - lag(confirmed),
+  ave_new_cases = rollmean(new_cases, 7, na.pad=TRUE, align="right")
+  ) %>%
+  filter(!is.na(new_cases), !is.na(ave_new_cases)) %>%
+  ggplot(aes(x = date)) +
+  geom_bar(aes(y = new_cases), stat = "identity", fill = "#0EFFE0") +
+  geom_line(aes(y = ave_new_cases), color ="blue") +
+  geom_vline(aes(xintercept = spot),
+                 color = "red", size = 0.5)+
+  geom_text(aes(x= as.Date(spot), y=200), label="the Starbucks Case", vjust = 1,hjust = 1, size= 4)+
+  geom_vline(aes(xintercept = spot1),
+                 color = "red", size = 0.5)+
+  geom_text(aes(x= as.Date(spot1), y=700), label="the Shincheonji Church Case", vjust = 1,hjust = -0.05, size= 4)+
+  geom_vline(aes(xintercept = spot3),
+                 color = "red", size = 0.5)+
+  geom_text(aes(x= as.Date(spot3), y=500), label="the Sarang Church Case", vjust = 1,hjust = 1, size= 4)+
+   geom_vline(aes(xintercept = lifted),
+                 color = "green", size = 0.5)+
+  geom_text(aes(x= as.Date(lifted), y=300), label="Restriction Lifted", vjust = 1,hjust = 1, size= 4)+
+  theme_minimal()+
+  ylab("New Cases")+
+  xlab("Date")+
+  scale_x_date(date_breaks="1 month", date_labels="%Y/%m")
+
+
+```
+
+```{r plot, fig.cap="Daily Cases Trend in South Korea", warning=FALSE, message=FALSE, echo=FALSE}
+ggplotly(plot) %>% 
+  config(displayModeBar = FALSE)
+```
+
+## Comparing First and Second Wave `r fa("disease", fill = "blue")`
+
+
+```{r}
+daily_case <- kor %>%
+  mutate(daily_cases = confirmed - lag(confirmed), daily_death = deaths - lag(deaths), daily_recovered = recovered - lag(recovered), daily_test = total_tests - lag(total_tests)) %>% 
+  mutate(test_regime = round(daily_test/population*100, digit = 4)) %>% 
+  mutate(Period = case_when(date <= "2020-05-06" ~ "First Wave",
+                            date >= "2020-05-06" & date <= "2020-08-08" ~ "Relaxed", 
+                            date >"2020-08-08" ~ "Second Wave"))
+
+daily_case <- daily_case %>% 
+  select(date, Period, daily_cases, daily_death, daily_recovered, daily_test, test_regime) %>% 
+  mutate(Date = mday(date), Month = month(date, label = TRUE)) %>% 
+  mutate(Confirmed = daily_cases, Deaths = daily_death, Recovered = daily_recovered, Tested = daily_test, "Test/Pop" = test_regime) %>% 
+  select(-date)
+
+daily_tidy <- daily_case %>% 
+  select(Date, Month, Period, Confirmed, Deaths, Recovered, Tested, "Test/Pop")
+
+
+```
+
+```{r dailytable, fig.cap= "Daily Cases and Testing Regime in South Korea", echo=FALSE, message=FALSE, warning=FALSE, out.width = "90%"}
+table <- DT::datatable(fillContainer = TRUE, daily_tidy, filter = 'top', rownames = FALSE, options = list(pageLength = 10,
+    autoWidth = FALSE,
+    columnDefs = list(list(width = '10px', target = c(1,2,3,4,5))),  
+     initComplete = JS(
+    "function(settings, json) {",
+    "$(this.api().table().header()).css({'background-color': '#7fe5f0', 'color': '#00000'});",
+    "}")
+)) %>% 
+  formatStyle(
+    "Confirmed",
+    background = styleColorBar(data = daily_tidy$Confirmed, 'lightblue'),
+    backgroundSize = '98% 88%',
+    backgroundRepeat = 'no-repeat',
+    backgroundPosition = 'center'
+  ) %>%
+  formatStyle(
+    "Deaths",
+    background = styleColorBar(data = daily_tidy$Deaths, '#fa4848'),
+    backgroundSize = '98% 88%',
+    backgroundRepeat = 'no-repeat',
+    backgroundPosition = 'center'
+  ) %>%
+  formatStyle(
+    "Tested",
+    background = styleColorBar(data = daily_tidy$Tested, 'lightblue'),
+    backgroundSize = '98% 88%',
+    backgroundRepeat = 'no-repeat',
+    backgroundPosition = 'center'
+  ) %>% 
+  formatPercentage("Test/Pop", 2)
+
+
+# widgetframe::frameWidget(table, width = 900, height = 600)
+```
+
+```{r, message=FALSE, warning=FALSE, include=FALSE}
+
+
+htmlwidgets::saveWidget(table, file = "table.html", selfcontained = TRUE)
+
+```
+
+<iframe seamless src="../table.html" width="100%" height="500"></iframe>
+
+In this part, I would like to show data collection of South Korean covid-19 using table above which covers daily cases (confirmed, deaths and recovered) and country's testing regime. We can play around with the table to see daily case and testing and also compare a day to other days using bar chart in each column (i.e. Confirmed, Deaths). To link the story with my previous plot in figure \@ref(fig:plot), I also divide the data in the table above into 3 different period, comprises of **first wave**, **relaxed** (when the strict restriction is lifted), and **second wave**.
+
+When we sort the column of **Confirmed** (by double clicking on the header) to get the daily cases ranked from highest to lowest, we can see that the highest number of daily cases are happened in the first wave, with the top tally is **851 new cases on March 3rd**, followed by 813 cases on February 29th and March 2nd (599 cases). The highest number in the second wave period is occured on **August 26th with 441 new cases**.
+
+Meanwhile, days with highest number of deaths are also in the first wave period, with the highest record is 11 deaths on March 2nd, followed by March 22 and 24, both days have 9 casualties. The gloomiest day in the second wave period is on August 28th, with 5 deaths recorded. 
+
+Moreover, number of daily testing were around **20000** per day (or 4% of total population) on the final days of August until September 2020. On the other hand, the highest number of recovered cases is occured on March 22nd, with 1369 of people finally tested negative on that day. 
+
+In the **relaxed** period, not many cases are recorded. Instead, testing frequency is quite massive during the period, with the largest number of testing occured on June 3rd (18058 daily testing). It seems like the South Korean Government try to push the testing frequency after they lifted the restriction in early May with the ease of social distancing guidelines and reopening all public spaces.
+
+```{r static, message = FALSE, warning=FALSE}
+mobility <- kor %>% 
+  select(date, leisure = gcmr_retail_recreation) %>% 
+  mutate(Date = mday(date), Month = month(date, label = TRUE)) %>% 
+  select(-date)
+
+# create mobility in month
+mob_jan <- mobility %>% 
+  filter(Month == "Jan") %>% 
+  mutate(graph =
+  spk_chr(leisure, 
+    chartRangeMin = 0,
+    type="line")) %>% 
+  group_by(Month) %>% 
+  summarise(graph) %>% 
+  distinct(.keep_all = FALSE)
+
+mob_feb <- mobility %>% 
+  filter(Month == "Feb") %>% 
+  mutate(graph =
+  spk_chr(leisure, 
+    chartRangeMin = 0,
+    type="line")) %>% 
+  group_by(Month) %>% 
+  summarise(graph) %>% 
+  distinct(.keep_all = FALSE)
+
+mob_mar <- mobility %>% 
+  filter(Month == "Mar") %>% 
+  mutate(graph =
+  spk_chr(leisure, 
+    chartRangeMin = 0,
+    type="line")) %>% 
+  group_by(Month) %>% 
+  summarise(graph) %>% 
+  distinct(.keep_all = FALSE)
+
+mob_apr <- mobility %>% 
+  filter(Month == "Apr") %>% 
+  mutate(graph =
+  spk_chr(leisure, 
+    chartRangeMin = 0,
+    type="line")) %>% 
+  group_by(Month) %>% 
+  summarise(graph) %>% 
+  distinct(.keep_all = FALSE)
+
+mob_may <- mobility %>% 
+  filter(Month == "May") %>% 
+  mutate(graph =
+  spk_chr(leisure, 
+    chartRangeMin = 0,
+    type="line")) %>% 
+  group_by(Month) %>% 
+  summarise(graph) %>% 
+  distinct(.keep_all = FALSE)
+
+mob_jun <- mobility %>% 
+  filter(Month == "Jun") %>% 
+  mutate(graph =
+  spk_chr(leisure, 
+    chartRangeMin = 0,
+    type="line")) %>% 
+  group_by(Month) %>% 
+  summarise(graph) %>% 
+  distinct(.keep_all = FALSE)
+
+mob_jul <- mobility %>% 
+  filter(Month == "Jul") %>% 
+  mutate(graph =
+  spk_chr(leisure, 
+    chartRangeMin = 0,
+    type="line")) %>% 
+  group_by(Month) %>% 
+  summarise(graph) %>% 
+  distinct(.keep_all = FALSE)
+
+
+mob_aug <- mobility %>% 
+  filter(Month == "Aug") %>% 
+  mutate(graph =
+  spk_chr(leisure, 
+    chartRangeMin = 0,
+    type="line")) %>% 
+  group_by(Month) %>% 
+  summarise(graph) %>% 
+  distinct(.keep_all = FALSE) 
+
+mob_sep <- mobility %>% 
+  filter(Month == "Sep") %>% 
+  mutate(graph = spk_chr(leisure, 
+    chartRangeMin = 0,
+    type="line")) %>% 
+  group_by(Month) %>% 
+  summarise(graph) %>% 
+  distinct(.keep_all = FALSE)
+
+graph_all <- rbind(mob_jan, mob_feb, mob_mar, mob_apr, mob_may, mob_jun, mob_jul, mob_aug, mob_sep)
+
+static <- daily_tidy %>%
+  group_by(Period, Month) %>% 
+  summarise(Confirmed = round(sum(Confirmed, na.rm = TRUE)), Deaths = round(sum(Deaths, na.rm = TRUE)), Recovered = round(sum(Recovered, na.rm = TRUE)), "Test/Pop" = round(mean(`Test/Pop`*100, na.rm = TRUE), 2))
+
+static_graph <- left_join(static, graph_all, by = "Month") %>% 
+  rename(Mobility = graph)
+  
+```
+
+
+```{r grapable, fig.cap="Covid-19 and Leisure Mobility Trend", warning = FALSE, message= FALSE}
+
+table_sum <- static_graph %>%
+  formattable::formattable(align=c("l")) %>% 
+  as.htmlwidget() %>% 
+  spk_add_deps()
+
+widgetframe::frameWidget(table_sum, width = 900, height = 400)
+```
+
+In the end, I try to summarize all confirmed, deaths and recovered cases as well as testing regime rate in each month and period. A month can be put in two different period according to the period division that I already mentioned in the previous paragraphs, for example May can be put in **First Wave** and **Relaxed** period. In addition, I also add a column of Google trend mobility particularly for leisure activities (i.e. visiting groceries, cafes) to complete my analysis in the cause of outbreak in each different period.
+
+As we can see from table \@ref(fig:grapable) during first wave, the highest freuency of leisure activities was happened in March and correspond to high number of new confirmed cases (6636 total cases in March). The virus spread seems to decrease in the following months followed by a decline in the leisure activities. 
+
+However, from June until August, people restarted in doing leisure activities until it reach the mid of August, where total cases jump up to 1347 in June. The cases continue to increase in July with 1486 total cases recorded. The mobility of people continue to relatively high until mid August where the cases rise high to **5584 cases** which made the Government finally conclude the relaxed period. 
+
+
+```{r table-cov, fig.cap= "Covid-19 Daily Cases and People's Mobility", echo=FALSE, message=FALSE, warning=FALSE}
+
+# kor_tidy <- kor %>% 
+#   select(date, confirmed, deaths, recovered, total_tests, Population = population) %>% 
+#     mutate(Confirmed = confirmed, Deaths = deaths, Recovered = recovered, Tested = total_tests) %>% 
+#   mutate(testing_regime =  round(Tested/Population*100, digits = 2)) %>%
+#   mutate(Month = month(date, label = TRUE), Date = mday(date))
+#   
+#   
+#   # mutate(Confirmed = format(confirmed, scientific=FALSE, big.mark = ","), Deaths = format(deaths, scientific=FALSE, big.mark = ","), Recovered = format(recovered, scientific=FALSE, big.mark = ","), Tested = as.numeric(total_tests)) %>% 
+#   # mutate("testing_regime" =  round(Tested/Population*100, digits = 2)) %>%
+#   # mutate(Month = month(date, label = TRUE), Date = mday(date), Tested = format(Tested, scientific=FALSE, big.mark = ","))
+# 
+# 
+# kor_tab <- kor_tidy %>% 
+#   select(-Population, -date)
+# 
+# 
+# col_order <- c("Date", "Month", "Confirmed",
+#                "Deaths", "Recovered", "Tested", "testing_regime")
+# 
+# kor_tab <- kor_tab[, col_order]
+# 
+# kor_dt <- kor_tab %>% 
+#   select(-testing_regime)
+# 
+# rownames(kor_dt) <- c()
+
+
+```
+
+```{r covtable, fig.cap= "Covid in South Korea", echo=FALSE, message=FALSE, warning=FALSE}
+# table <- DT::datatable(fillContainer = TRUE, kor_dt, filter = 'top', rownames = FALSE, options = list(pageLength = 10,
+#     autoWidth = FALSE,
+#   columnDefs = list(list(width = '20px', targets = c(1, 2))),  
+#      initComplete = JS(
+#     "function(settings, json) {",
+#     "$(this.api().table().header()).css({'background-color': '#7fe5f0', 'color': '#00000'});",
+#     "}")
+# )) %>% 
+#   formatStyle(
+#     'Confirmed',
+#     background = styleColorBar(data = kor_dt$Tested, 'lightblue'),
+#     backgroundSize = '98% 88%',
+#     backgroundRepeat = 'no-repeat',
+#     backgroundPosition = 'center'
+#   )
+# 
+# widgetframe::frameWidget(table, width = 900, height = 600)
+```
+
+
+
+```{r, echo = FALSE, warning=FALSE, message = FALSE}
+# Increasing cases
+# Google trend
+# trend_google <- download_google_trends_data(search_term = "coronavirus", countries = "KOR", cached = FALSE)
+# 
+# # Apple mobility
+# mob_apple <- download_apple_mtr_data(type = "country_city") %>% 
+#         filter(iso3c == "KOR")
+#   
+# mob_google <- download_google_cmr_data(type = "country") %>% 
+#   filter(iso3c == "KOR")
+#   
+# 
+# mob_all <- left_join(mob_apple, mob_google, by = "date") %>% 
+#   mutate(month = month(date), day = mday(date), wday = wday(date, label = TRUE)) %>% 
+#   select(-sub_region, -transit, -timestamp.x, -timestamp.y, -iso3c.x, -iso3c.y)
+
+
+```
+
+
+## Takeaways `r fa("hand-holding-heart", fill ="red")`
+
+The brave action of South Korean Government to ease the strict restriction in order to save the economy unfortunately not followed by people self-discipline to keep doing social distancing which later triggers second wave of pandemic.
+
+The second wave which occurs in the end of August caused a huge decrease in the leisure activities because of reimposed strict restriction.
+
+From South Korea case, we learn several things:
+<br> 1. While full country lockdown is not necessarily required, self-discipline of doing social distancing is really essential to curb the spread of outbreak.
+<br> 2. Using appropriate mask (i.e. KF-94 or N95) can effectively prevent us from virus infection as shown in the Starbucks case.
+
+<center>![image source: media.giphy.com ](https://media.giphy.com/media/s8WujgkvaRKda/giphy.gif)</center>
+<center>image source: media.giphy.com</center>
+
+## References
