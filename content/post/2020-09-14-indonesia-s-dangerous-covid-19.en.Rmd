@@ -1,6 +1,6 @@
 ---
-title: Indonesia's Deadly Covid-19
-author: Dea Avega Editya
+title: "Indonesia's Deadly Covid-19"
+author: "Dea Avega Editya"
 date: '2020-09-14'
 slug: indonesia-s-dangerous-covid-19
 categories: []
@@ -17,11 +17,11 @@ image:
 projects: []
 bibliography: references.bib
 nocite: |
-  @tidyverse, @lubridate, @dplyr, @plotly, @ggplot, @zoo, @ggrepel, @patch
+  @tidyverse, @lubridate, @dplyr, @plotly, @ggplot, @zoo, @ggrepel, @patch, @personograph
 ---
 
 ```{r setup, echo=FALSE, warning=FALSE, message=FALSE}
-knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE, fig.align = "center")
+knitr::opts_chunk$set(echo = FALSE, warning = FALSE, message = FALSE)
 
 ```
 
@@ -37,6 +37,7 @@ library(patchwork)
 library(fontawesome)
 library(ggrepel)
 library(ggthemes)
+library(emojifont)
 
 # load data of Korea
 
@@ -62,9 +63,9 @@ Hence, in this blog I would like to analyze covid-19 cases in Indonesia, both it
 
 Like my previous blog post, I use covid-19 data set from tidycovid package @tidycovid, which includes information about numbers of confirmed cases, deaths, recovered and google mobility trend. Data of covid-19 in Indonesia ranges from January 22, 2020 until September 11th, 2020. Google mobilty trends that used are related to community's mobility at workplaces and transportation hubs (stations).
   
-## Horrible Cases and Still Increasing `r fa("skull", fill = "red")`  
+## Horrible Cases and Still Increasing `r fa("dove", fill = "green")`
   
-```{r daily, fig.cap="Average Daily Cases in Indonesia as of Sep 11, 2020"}
+```{r daily, fig.cap="Average Daily Cases in Indonesia as of Sep 11, 2020", fig.align = "center"}
 plot <- indo %>%
   mutate(
   new_cases = confirmed - lag(confirmed),
@@ -87,37 +88,46 @@ ggplot(aes(x = date)) +
   #   nudge_x = .15,
   #   nudge_y = .5)+
   
-  geom_text_repel(aes(y = ave_new_cases, label = ifelse(date == '2020-09-11', ave_new_cases, "")), point.padding = 0.2,
+  geom_text_repel(aes(y = ave_new_cases, label = ifelse(date == '2020-09-11', ave_new_cases, "")), size = 8, point.padding = 0.2,
     nudge_x = .15,
-    nudge_y = .5)+
-  theme_minimal()+
+    nudge_y = .8)+
+  # theme_minimal()+
   # geom_text_repel(aes(y = ave_new_deaths, label = ifelse(new_deaths == max(new_deaths), max(ave_new_deaths), "")), point.padding = 0.2,
   #   nudge_x = .15,
   #   nudge_y = .5)+
   
-  geom_text_repel(aes(y = ave_new_deaths, label = ifelse(date == '2020-09-11', ave_new_deaths, "")), point.padding = 0.2,
+  geom_text_repel(aes(y = ave_new_deaths, label = ifelse(date == '2020-09-11', ave_new_deaths, "")), size = 8, point.padding = 0.2,
     nudge_x = .15,
     nudge_y = .5)+
   
-  geom_text_repel(aes(y = ave_new_recovered, label = ifelse(date == '2020-09-11', ave_new_recovered, "")), point.padding = 0.2,
+  geom_text_repel(aes(y = ave_new_recovered, label = ifelse(date == '2020-09-11', ave_new_recovered, "")),size = 8, point.padding = 0.2,
     nudge_x = .15,
-    nudge_y = .5)+
-  
-  theme_economist()+
+    nudge_y = .8)+
   ylab("New Cases")+
   xlab("Date")+
   scale_x_date(date_breaks="1 month", date_labels="%Y/%m")+
    scale_color_manual(values = c('Avg Confirmed' = 'darkblue',
     'Avg Death' = 'red', 'Avg Recovered' = 'green' )) +
-  labs(color = 'Trend')
+  labs(color = 'Trend')+
+  theme_economist()+
+  theme(legend.position = c(0.2, 0.85),
+  legend.direction = "vertical",
+  legend.title = element_text(color = "black", size = 25),
+  legend.text = element_text(color = "black", size = 20),
+  axis.text=element_text(size=25),
+  axis.title=element_text(size=30),
+  plot.title = element_text(size = 40, face = "bold"))+
+    ggtitle("Increasing Trend of Covid-19 Cases")
+  
 
 ```
 
-From figure \@ref(fig:daily) we see that new daily cases are still increasing from the first infection on January 22th, 2020 until current days. The latest recorded number on September 11th, 2020 is 3.343 daily new cases. Fortunately, number of recovered patients also increases with the latest record is 2.291 people recovered from the illness. The most sad story about covid-19 in Indonesia is about its daily deaths which recorded as high as 102 on September 11th, 2020.
+From figure \@ref(fig:daily) we see that daily average confirmed cases are still increasing from the first infection on January 22th, 2020 until current days. The latest recorded number on September 11th, 2020 is 3.343 daily average new cases. Fortunately, number of recovered patients also increases with the latest record is 2.291 people recovered from the illness. The most sad story about covid-19 in Indonesia is about its daily deaths which recorded as high as 102 (daily average) on September 11th, 2020.
 
-```{r death, fig.cap="Increasing Number of Daily Deaths"}
+## Till Death Do Us Part `r fa("heart-broken", fill = "red")`
+
+```{r death, fig.cap="Increasing Number of Daily Deaths", fig.align = "center"}
 library(emojifont)
-load.fontawesome()
 
 ggplot(plot, aes(x = date)) +
   geom_bar(aes(y = new_deaths), stat = "identity", fill = "#ff6d57", alpha = 0.5) +
@@ -128,17 +138,39 @@ ggplot(plot, aes(x = date)) +
   #   label.size = 0.1,
   #   color = "black", alpha = 0.1
   # )+
-  theme_economist()+
   ylab("New Deaths")+
   xlab("Date")+
   scale_x_date(date_breaks="1 month", date_labels="%Y/%m")+
    scale_color_manual(values = c('Avg Confirmed' = 'darkblue',
     'Avg Death' = 'red')) +
   labs(color = 'Line Trend')+
-  ggtitle("Daily Average Deaths in Indonesia")+
-  geom_text_repel(aes(y = ave_new_deaths, label = ifelse(ave_new_deaths >= 100, ave_new_deaths, "")), point.padding = 0.2,
+  ggtitle("Average Deaths in Indonesia")+
+  geom_text_repel(aes(y = ave_new_deaths, label = ifelse(ave_new_deaths >= 100, ave_new_deaths, "")), size=10, point.padding = 0.2,
     nudge_x = .15,
-    nudge_y = .5)
+    nudge_y = .5)+
+  theme_economist()+
+  theme(
+    
+    # panel.background = element_rect(fill = NA, colour = NA),
+  # Hide panel borders and remove grid lines
+  # panel.border = element_blank(),
+
+  # panel.grid.major = element_blank(),
+  panel.grid.minor.y = element_line(size = 0.05, linetype = 'dashed',
+                                colour = "white"),
+  # Change axis line
+  plot.title = element_text(size = 40, face = "bold"),
+  axis.line = element_line(colour = "black"),
+  axis.text=element_text(size=25),
+  axis.title=element_text(size=30),
+  legend.position = c(0.3, 0.92),
+  legend.direction = "horizontal",
+  legend.background = element_rect(fill = "lightpink", color = "black"),
+  legend.key = element_rect(color = NA, fill = NA),
+  legend.title = element_text(color = "black", size = 25),
+  legend.text = element_text(color = "black", size = 20)
+  )
+
 ```
 
 
@@ -148,14 +180,26 @@ plot$ave_new_deaths[227]/plot$ave_new_cases[227]*100
 ```
 
 
-Looking more clearly on daily trend of deaths on figure \@ref(fig:death), it is very scary to see that the trend is actually increasing since the beginning of the pandemic. The figure also show several spots in which the daily deaths pass 100 tally. 
+Looking more detail on daily average trend of deaths on figure \@ref(fig:death), it is very scary to see that the trend is actually increasing since the beginning of the pandemic. The figure also show several spots in which the daily average death pass 100 tally. 
 Recent news reported new finding of covid-19's behavior that makes this disease very dangerous and deadly. Some fatal patients are believed to caught the disease without feel any symptoms, however the oxygen level in their body is dropped dramatically which finally cause their deaths. This new dangerous behavior is called "Happy Hypoxia". 
 
-## Do the Workers really Work from Home?
+```{r death-recovered, fig.cap="Comparison Number of Death and Recovered", out.width = "70%", fig.align = "center"}
+library(personograph)
+
+data <- list(death = 0.03,  recovered = 0.97)
+
+personograph(data, n.icons=30, dimensions=c(3,10), plot.width=0.75, colors=list(death="red", recovered="darkgreen"), icon.style= 11)
+
+```
+
+Pictogram in figure \@ref(fig:death-recovered) give us a comparison number between people who died and recovered. It can be roughly said that around 30 infected people, 1 person is dead due to coronavirus.
+
+
+## Do the Workers really Work from Home? `r fa("briefcase", fill = "blue")`
 
 In this section, I would like to see the effect of government suggestion to work from home (WFH) on workers. It is believed that many business sectors in Indonesia are not really flexible in terms of moving working spaces into online. There are several reasons underneath the situation, for instance not many people have access to good internet especially broadband which provides unlimited internet bandwidth. Many people are still relying on their mobile internet service which is not unlimited and much more expensive than the broadband. Some business characteristics also require workers to do their job onsite.
 
-```{r mobile, fig.cap="Workplaces and Stations Mobility"}
+```{r mobile, fig.cap="Workplaces and Stations Mobility", fig.align = "center"}
 
 mob_trend <- plot %>% 
   mutate(
@@ -166,35 +210,61 @@ mob_trend <- plot %>%
   mutate(date = date(date))
   
 
+# icon <- fa("r-project", fill = "steelblue")
+library(emojifont)
+load.emojifont("EmojiOne.ttf")
+
 mob_trend %>% 
 ggplot(aes(x = date)) +
   geom_line(aes(y = ave_work, color ="Workplaces"), size = 1.2) +
   geom_line(aes(y = ave_station, color ="Stations"), size = 1.2)+
-  geom_text_repel(aes(y = ave_work, label = ifelse(date == '2020-09-08', ave_work, "")), point.padding = 0.2,
+  geom_text_repel(aes(y = ave_work, label = ifelse(date == '2020-09-08', ave_work, "")),size = 10, point.padding = 0.2,
     nudge_x = .15,
     nudge_y = .5)+
-  geom_text_repel(aes(y = ave_station, label = ifelse(date == '2020-09-08', ave_station, "")), point.padding = 0.2,
+  geom_text_repel(aes(y = ave_station, label = ifelse(date == '2020-09-08', ave_station, "")), size = 10,point.padding = 0.2,
     nudge_x = .15,
     nudge_y = .5)+
-  geom_text_repel(aes(y = ave_station, label = ifelse(date == "2020-05-02", "2020/05/02", "")), point.padding = 0.2,
-    nudge_x = .15,
-    nudge_y = .1)+
+  geom_text_repel(aes(y = ave_station, label = ifelse(date == "2020-05-02", "2020/05/02", "")),size = 10, point.padding = 0.2,
+    nudge_x = .3,
+    nudge_y = .05)+
   ylab("Average Weekly Mobility")+
-   geom_text_repel(aes(y = ave_work, label = ifelse(ave_work == min(ave_work), as.character(date), "")), point.padding = 0.2,
-    nudge_x = .15,
-    nudge_y = .1)+
+   geom_text_repel(aes(y = ave_work, label = ifelse(ave_work == min(ave_work), as.character(date), "")),size = 10, point.padding = 0.3,
+    nudge_x = .4,
+    nudge_y = .5)+
   ylab("Average Weekly Mobility")+
   theme_economist()+
-  labs(color = 'Mobility Trend')
+  geom_text(aes(x = date("2020-08-01"), y = -5), label = emoji("office"), family = "EmojiOne", size = 20)+
+  geom_text(aes(x = date("2020-08-01"), y = -35), label = emoji("bus"), family = "EmojiOne", size = 20)+
+   guides(color = guide_legend(title = "Mobility Trend"))+
+  theme(panel.background = element_rect(fill = "transparent", colour = NA),
+        panel.border = element_blank(),
+        axis.line = element_line(colour = "black"),
+        axis.text=element_text(size=17),
+        plot.title = element_text(size = 40, face = "bold"),
+  axis.title=element_text(size=20),
+  legend.position = c(0.6, 0.95),
+  legend.direction = "horizontal",
+  legend.background = element_rect(fill = NA, color = NA),
+  legend.key = element_rect(color = NA, fill = NA),
+  legend.title = element_text(color = "black", size = 25),
+  legend.text = element_text(color = "black", size = 20)
+  )+
+  geom_hline(yintercept = 0, linetype = "dashed")+
+  annotate("rect", xmin = date("2020-08-01"), xmax = date("2020-09-08")
+, ymin = -40, ymax = -15,
+  alpha = .2) +
+  ggtitle("Mobility Trends During Pandemic")
 
+  
 ```
+
 
 Taking advantages from Google mobility trends that record people's movement at several spots related to workplaces as well as transportation hubs (stations), we will check on the previous assumption that many workers are still going to workplaces despite of the Government's instruction.
 
 According to average mobility trend as shown in figure \@ref(fig:mobile), there were actualy very huge drops in mobility both at workplaces and stations which indicate that many workers seems to start working at home during early pandemic in March 2020. However, as can be seen from the figure, starting from the end of May 2020 the trends are increasing up to recent. Mobility at workplaces is still lower than the start of the pandemic, but it is now only reduced by 20%, which means that **80% employees are possibly still going to their offices**.
 
-On the other hand, mobility at transportation hubs (i.e. bus terminals and train stations) has fallen deeper than workplaces mobility and now is showing an increasing trend although not as high as workplaces trend. Hence, it can be a hint that **among those who are working from offices, some of them are shifting from using public transportation to more private alternatives such as taxi or their own vehicles**.
+On the other hand, mobility at transportation hubs (i.e. bus terminals and train stations) has fallen much deeper than workplaces mobility and now is showing an increasing trend although still not as high as workplaces trend. Hence, it can be a hint that **among those who are working from offices(WFO), some of them are shifting from using public transportation to more private alternatives such as taxi or their own vehicles**.
 
-<center>![Workers use train to work (source: www.beritasatu.com)](https://img.beritasatu.com/cache/beritasatu/600x350-2/1586874755.jpg)</center><center>Less Crowded Workers in Train (source: beritasatu.com)</center>
+<center>![Workers use train to work (source: www.beritasatu.com)](https://img.beritasatu.com/cache/beritasatu/600x350-2/1586874755.jpg)</center><center>Less Crowded Workers in Commuter Train (source: beritasatu.com)</center>
 
 ## References

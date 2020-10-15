@@ -1,6 +1,6 @@
 ---
-title: Indonesia's Deadly Covid-19
-author: Dea Avega Editya
+title: "Indonesia's Deadly Covid-19"
+author: "Dea Avega Editya"
 date: '2020-09-14'
 slug: indonesia-s-dangerous-covid-19
 categories: []
@@ -17,7 +17,7 @@ image:
 projects: []
 bibliography: references.bib
 nocite: |
-  @tidyverse, @lubridate, @dplyr, @plotly, @ggplot, @zoo, @ggrepel, @patch
+  @tidyverse, @lubridate, @dplyr, @plotly, @ggplot, @zoo, @ggrepel, @patch, @personograph
 ---
 
 
@@ -38,40 +38,50 @@ Low risk is described as not showing symptoms, young (under 40 years old) and no
 <p>Like my previous blog post, I use covid-19 data set from tidycovid package <span class="citation">Gassen (2020)</span>, which includes information about numbers of confirmed cases, deaths, recovered and google mobility trend. Data of covid-19 in Indonesia ranges from January 22, 2020 until September 11th, 2020. Google mobilty trends that used are related to community’s mobility at workplaces and transportation hubs (stations).</p>
 </div>
 <div id="horrible-cases-and-still-increasing" class="section level2">
-<h2>Horrible Cases and Still Increasing <svg style="height:0.8em;top:.04em;position:relative;fill:red;" viewBox="0 0 512 512"><path d="M256 0C114.6 0 0 100.3 0 224c0 70.1 36.9 132.6 94.5 173.7 9.6 6.9 15.2 18.1 13.5 29.9l-9.4 66.2c-1.4 9.6 6 18.2 15.7 18.2H192v-56c0-4.4 3.6-8 8-8h16c4.4 0 8 3.6 8 8v56h64v-56c0-4.4 3.6-8 8-8h16c4.4 0 8 3.6 8 8v56h77.7c9.7 0 17.1-8.6 15.7-18.2l-9.4-66.2c-1.7-11.7 3.8-23 13.5-29.9C475.1 356.6 512 294.1 512 224 512 100.3 397.4 0 256 0zm-96 320c-35.3 0-64-28.7-64-64s28.7-64 64-64 64 28.7 64 64-28.7 64-64 64zm192 0c-35.3 0-64-28.7-64-64s28.7-64 64-64 64 28.7 64 64-28.7 64-64 64z"/></svg></h2>
+<h2>Horrible Cases and Still Increasing <svg style="height:0.8em;top:.04em;position:relative;fill:green;" viewBox="0 0 512 512"><path d="M288 167.2v-28.1c-28.2-36.3-47.1-79.3-54.1-125.2-2.1-13.5-19-18.8-27.8-8.3-21.1 24.9-37.7 54.1-48.9 86.5 34.2 38.3 80 64.6 130.8 75.1zM400 64c-44.2 0-80 35.9-80 80.1v59.4C215.6 197.3 127 133 87 41.8c-5.5-12.5-23.2-13.2-29-.9C41.4 76 32 115.2 32 156.6c0 70.8 34.1 136.9 85.1 185.9 13.2 12.7 26.1 23.2 38.9 32.8l-143.9 36C1.4 414-3.4 426.4 2.6 435.7 20 462.6 63 508.2 155.8 512c8 .3 16-2.6 22.1-7.9l65.2-56.1H320c88.4 0 160-71.5 160-159.9V128l32-64H400zm0 96.1c-8.8 0-16-7.2-16-16s7.2-16 16-16 16 7.2 16 16-7.2 16-16 16z"/></svg></h2>
 <div class="figure" style="text-align: center"><span id="fig:daily"></span>
 <img src="/post/2020-09-14-indonesia-s-dangerous-covid-19.en_files/figure-html/daily-1.png" alt="Average Daily Cases in Indonesia as of Sep 11, 2020" width="672" />
 <p class="caption">
 Figure 1: Average Daily Cases in Indonesia as of Sep 11, 2020
 </p>
 </div>
-<p>From figure <a href="#fig:daily">1</a> we see that new daily cases are still increasing from the first infection on January 22th, 2020 until current days. The latest recorded number on September 11th, 2020 is 3.343 daily new cases. Fortunately, number of recovered patients also increases with the latest record is 2.291 people recovered from the illness. The most sad story about covid-19 in Indonesia is about its daily deaths which recorded as high as 102 on September 11th, 2020.</p>
+<p>From figure <a href="#fig:daily">1</a> we see that daily average confirmed cases are still increasing from the first infection on January 22th, 2020 until current days. The latest recorded number on September 11th, 2020 is 3.343 daily average new cases. Fortunately, number of recovered patients also increases with the latest record is 2.291 people recovered from the illness. The most sad story about covid-19 in Indonesia is about its daily deaths which recorded as high as 102 (daily average) on September 11th, 2020.</p>
+</div>
+<div id="till-death-do-us-part" class="section level2">
+<h2>Till Death Do Us Part <svg style="height:0.8em;top:.04em;position:relative;fill:red;" viewBox="0 0 512 512"><path d="M473.7 73.8l-2.4-2.5c-46-47-118-51.7-169.6-14.8L336 159.9l-96 64 48 128-144-144 96-64-28.6-86.5C159.7 19.6 87 24 40.7 71.4l-2.4 2.4C-10.4 123.6-12.5 202.9 31 256l212.1 218.6c7.1 7.3 18.6 7.3 25.7 0L481 255.9c43.5-53 41.4-132.3-7.3-182.1z"/></svg></h2>
 <div class="figure" style="text-align: center"><span id="fig:death"></span>
 <img src="/post/2020-09-14-indonesia-s-dangerous-covid-19.en_files/figure-html/death-1.png" alt="Increasing Number of Daily Deaths" width="672" />
 <p class="caption">
 Figure 2: Increasing Number of Daily Deaths
 </p>
 </div>
-<p>Looking more clearly on daily trend of deaths on figure <a href="#fig:death">2</a>, it is very scary to see that the trend is actually increasing since the beginning of the pandemic. The figure also show several spots in which the daily deaths pass 100 tally.
+<p>Looking more detail on daily average trend of deaths on figure <a href="#fig:death">2</a>, it is very scary to see that the trend is actually increasing since the beginning of the pandemic. The figure also show several spots in which the daily average death pass 100 tally.
 Recent news reported new finding of covid-19’s behavior that makes this disease very dangerous and deadly. Some fatal patients are believed to caught the disease without feel any symptoms, however the oxygen level in their body is dropped dramatically which finally cause their deaths. This new dangerous behavior is called “Happy Hypoxia”.</p>
+<div class="figure" style="text-align: center"><span id="fig:death-recovered"></span>
+<img src="/post/2020-09-14-indonesia-s-dangerous-covid-19.en_files/figure-html/death-recovered-1.png" alt="Comparison Number of Death and Recovered" width="70%" />
+<p class="caption">
+Figure 3: Comparison Number of Death and Recovered
+</p>
+</div>
+<p>Pictogram in figure <a href="#fig:death-recovered">3</a> give us a comparison number between people who died and recovered. It can be roughly said that around 30 infected people, 1 person is dead due to coronavirus.</p>
 </div>
 <div id="do-the-workers-really-work-from-home" class="section level2">
-<h2>Do the Workers really Work from Home?</h2>
+<h2>Do the Workers really Work from Home? <svg style="height:0.8em;top:.04em;position:relative;fill:blue;" viewBox="0 0 512 512"><path d="M320 336c0 8.84-7.16 16-16 16h-96c-8.84 0-16-7.16-16-16v-48H0v144c0 25.6 22.4 48 48 48h416c25.6 0 48-22.4 48-48V288H320v48zm144-208h-80V80c0-25.6-22.4-48-48-48H176c-25.6 0-48 22.4-48 48v48H48c-25.6 0-48 22.4-48 48v80h512v-80c0-25.6-22.4-48-48-48zm-144 0H192V96h128v32z"/></svg></h2>
 <p>In this section, I would like to see the effect of government suggestion to work from home (WFH) on workers. It is believed that many business sectors in Indonesia are not really flexible in terms of moving working spaces into online. There are several reasons underneath the situation, for instance not many people have access to good internet especially broadband which provides unlimited internet bandwidth. Many people are still relying on their mobile internet service which is not unlimited and much more expensive than the broadband. Some business characteristics also require workers to do their job onsite.</p>
 <div class="figure" style="text-align: center"><span id="fig:mobile"></span>
 <img src="/post/2020-09-14-indonesia-s-dangerous-covid-19.en_files/figure-html/mobile-1.png" alt="Workplaces and Stations Mobility" width="672" />
 <p class="caption">
-Figure 3: Workplaces and Stations Mobility
+Figure 4: Workplaces and Stations Mobility
 </p>
 </div>
 <p>Taking advantages from Google mobility trends that record people’s movement at several spots related to workplaces as well as transportation hubs (stations), we will check on the previous assumption that many workers are still going to workplaces despite of the Government’s instruction.</p>
-<p>According to average mobility trend as shown in figure <a href="#fig:mobile">3</a>, there were actualy very huge drops in mobility both at workplaces and stations which indicate that many workers seems to start working at home during early pandemic in March 2020. However, as can be seen from the figure, starting from the end of May 2020 the trends are increasing up to recent. Mobility at workplaces is still lower than the start of the pandemic, but it is now only reduced by 20%, which means that <strong>80% employees are possibly still going to their offices</strong>.</p>
-<p>On the other hand, mobility at transportation hubs (i.e. bus terminals and train stations) has fallen deeper than workplaces mobility and now is showing an increasing trend although not as high as workplaces trend. Hence, it can be a hint that <strong>among those who are working from offices, some of them are shifting from using public transportation to more private alternatives such as taxi or their own vehicles</strong>.</p>
+<p>According to average mobility trend as shown in figure <a href="#fig:mobile">4</a>, there were actualy very huge drops in mobility both at workplaces and stations which indicate that many workers seems to start working at home during early pandemic in March 2020. However, as can be seen from the figure, starting from the end of May 2020 the trends are increasing up to recent. Mobility at workplaces is still lower than the start of the pandemic, but it is now only reduced by 20%, which means that <strong>80% employees are possibly still going to their offices</strong>.</p>
+<p>On the other hand, mobility at transportation hubs (i.e. bus terminals and train stations) has fallen much deeper than workplaces mobility and now is showing an increasing trend although still not as high as workplaces trend. Hence, it can be a hint that <strong>among those who are working from offices(WFO), some of them are shifting from using public transportation to more private alternatives such as taxi or their own vehicles</strong>.</p>
 <center>
 <img src="https://img.beritasatu.com/cache/beritasatu/600x350-2/1586874755.jpg" title="fig:" alt="Workers use train to work (source: www.beritasatu.com)" />
 </center>
 <center>
-Less Crowded Workers in Train (source: beritasatu.com)
+Less Crowded Workers in Commuter Train (source: beritasatu.com)
 </center>
 </div>
 <div id="references" class="section level2 unnumbered">
@@ -82,6 +92,9 @@ Less Crowded Workers in Train (source: beritasatu.com)
 </div>
 <div id="ref-lubridate">
 <p>Grolemund, Garrett, and Hadley Wickham. 2011. “Dates and Times Made Easy with lubridate.” <em>Journal of Statistical Software</em> 40 (3): 1–25. <a href="http://www.jstatsoft.org/v40/i03/">http://www.jstatsoft.org/v40/i03/</a>.</p>
+</div>
+<div id="ref-personograph">
+<p>Kuiper, Joel, and Iain Marshall. 2015. <em>Personograph: Pictographic Representation of Treatment Effects</em>. <a href="https://CRAN.R-project.org/package=personograph">https://CRAN.R-project.org/package=personograph</a>.</p>
 </div>
 <div id="ref-patch">
 <p>Pedersen, Thomas Lin. 2020. <em>Patchwork: The Composer of Plots</em>. <a href="https://CRAN.R-project.org/package=patchwork">https://CRAN.R-project.org/package=patchwork</a>.</p>

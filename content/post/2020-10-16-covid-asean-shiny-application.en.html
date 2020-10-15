@@ -1,0 +1,104 @@
+---
+title: Covid ASEAN Shiny Application
+author: Dea Avega Editya
+date: '2020-10-13'
+slug: covid-asean-shiny-application
+categories:
+  - shiny
+  - story
+tags: []
+subtitle: ''
+summary: ''
+authors: []
+lastmod: '2020-10-13T23:40:51+11:00'
+featured: no
+image:
+  caption: ''
+  focal_point: ''
+  preview_only: no
+projects: []
+bibliography: references.bib
+nocite: |
+  @timevis, @shiny
+---
+
+
+
+<div id="background-story" class="section level2">
+<h2>Background Story</h2>
+<p>In the last mid semester break when I was still writing a book about creating a website using Hugo, I got announcement from my lecturer that the assessment for creating a shiny application was available on the course website. I headed to the website and read the instructions for the shiny assessment. Since the intention was generally about making comparison of covid-19 cases, I was thinking about making an application that shows cases development and people’s mobility in several ASEAN countries.</p>
+<p>In selecting the countries, I considered one that has moderate to high cases number of covid-19, hence Vietnam which has very low cases was not selected. One of the countries definitely must be my own country Indonesia. Other countries to pick were considered to have cases which are not extremely as low as Vietnam. Hence, I came up with 5 major ASEAN countries comprise of Indonesia, Malaysia, Singapore, Thailand and Philippines.</p>
+<p>In my opinion, this combination of countries is quite good because we can look at the covid-19 development and the response of people from <strong>developing and middle income countries</strong> (Indonesia, Malaysia, Philippines and Thailand) and <strong>a developed and high income country</strong> (Singapore). The idea was to provide visualizations on different progress of outbreak (on the basis of cases number) and help users to analyse on whether people from different country (and income level) react differently. In addition, users can check the immediate impact of a pandemic policy by selecting corresponding date range, for example users can see number of new cases in Singapore and Malaysia after these countries imposed strict restrictions and closed their borders.</p>
+</div>
+<div id="introduction-to-the-covid-asean-shiny-application-sparkles" class="section level2">
+<h2>Introduction to the Covid ASEAN Shiny Application :sparkles:</h2>
+<p>My shiny application has 2 main sections, which are <strong>the control panel (left sidebar)</strong> and <strong>the output panel (main display)</strong>. The control panel (shown in figure <a href="#fig:sidebar">1</a>) allows user to select people’s mobility categories sourced from Google’s community mobility report. These categories are mobility in workstations, parks, stations, groceries, recreations and residentials. In addition, the panel also has option for choosing specific date range for mobility trend and also a feature to display a table contains summary of cases in a particular country.</p>
+<p>On the other hand, the main display provides 3 plots covering total cases number from all countries, cases trend line in a specific country as well as mobility trend. The total cases number plot is a primary plot which can be linked to the secondary plot of cases trend line by clicking on a specific country. This behaviour takes advantage of <code>plotly::event_data</code> function. The mobility trend (as in figure <a href="#fig:mobil">2</a>) shows average trend in people’s mobility in several categories and in specific date range that can be chosen from the sidebar.</p>
+<div class="figure" style="text-align: center"><span id="fig:sidebar"></span>
+<img src="sidebar.PNG" alt="Control Panel of My Shiny Application" width="346" />
+<p class="caption">
+Figure 1: Control Panel of My Shiny Application
+</p>
+</div>
+<div class="figure" style="text-align: center"><span id="fig:mobil"></span>
+<img src="mobility_plot.PNG" alt="ASEAN People's Mobility Chart" width="738" />
+<p class="caption">
+Figure 2: ASEAN People’s Mobility Chart
+</p>
+</div>
+</div>
+<div id="self-review" class="section level2">
+<h2>Self Review</h2>
+<div id="what-is-good-about-the-application-sparkling_heart" class="section level3">
+<h3>What is Good about the Application? :sparkling_heart:</h3>
+<p>Considering the composition of the visualization design, I believe that this shiny application can be quite informative and at the same time still manage to be compact and concise. Users can easily read brief explanations on each of the visualization including how to set parameters of the plots. This is because in designing user interface layout I tried to imagine myself as a general user who have no prior experience in using shiny application. The summary table layout also fit the sidebar but still can give detail information about covid-19 in a selected country, related to total confirmed, recovered and deaths in each month. The reason behind this placement is to enable user to look at the trend line and mobility plots while at the same time see the summary data on the left.</p>
+<div class="figure">
+<img src="https://media.giphy.com/media/d2VNBUe0BhUGYqpa/giphy.gif" alt="" />
+<p class="caption">source: media.giphy.com</p>
+</div>
+</div>
+<div id="what-do-i-want-to-improve-muscle" class="section level3">
+<h3>What Do I Want to Improve? :muscle:</h3>
+<p>I realize that my shiny application has several issues that can be improved in order to give clearer understanding. Frankly speaking, the first main issue is regarding the first plotly chart that was intended to show total confirmed cases between countries. The plot shows very high number of total cases since I falsely chose a variable to sum up. Rather than summing up new daily cases, I summarized variable “confirmed” which actually contains accumulation cases. Although the plot (shown in figure <a href="#fig:total">3</a>) still able to shows “degree of severity” between all countries (which reveals Philippines and Indonesia as the most severe countries regarding the number of cases), it does not provide appropriate total number of cases (I hope my lecturer will not harshly punish me on that slip :sweat_smile:).</p>
+<div class="figure" style="text-align: center"><span id="fig:total"></span>
+<img src="total_case.PNG" alt="Misleading Chart due to Falsely Choose a Variable" width="734" />
+<p class="caption">
+Figure 3: Misleading Chart due to Falsely Choose a Variable
+</p>
+</div>
+<p>Moreover, I also think that it maybe better to link between table and the first plot, hence when users click on a country in the first plot it will change not only the trend line plot but also the summary table showing that one particular country.</p>
+</div>
+<div id="some-possible-elements-to-add-on-wrench" class="section level3">
+<h3>Some Possible Elements to Add On :wrench:</h3>
+<p>Regarding that my shiny application just contains tabular data and visualization, I would like to add a geospasial element to the application. I was thinking to use leaflet map to show locations of these 5 countries but at the moment I just wanted users to focus on the covid-19 data. Having a map element, users will be able to click on the capital of each country to bring them to several plots (i.e. total cases and trend line plots).</p>
+<p>Another feature I want to add is actually timeline events from these ASEAN countries related to the covid policy, i.e. first case, time event of closing international border, first 1000 cases and lifting the lockdown. For adding this timeline, perhaps I can use timeviz package and put <code>timevisOutput()</code> in UI section as well as <code>renderTimevis(timevis())</code> to the server. Users should be able to interact with the timeline for example by selecting parameter date range to show some milestone events in the period (illustrated in figure <a href="#fig:timevis">4</a>).</p>
+<div class="figure" style="text-align: center"><span id="fig:timevis"></span>
+<img src="timevis.png" alt="Illustration of Timevis Element" width="546" />
+<p class="caption">
+Figure 4: Illustration of Timevis Element
+</p>
+</div>
+</div>
+<div id="some-dreamed-features-star2" class="section level3">
+<h3>Some Dreamed Features :star2:</h3>
+<p>Talking about some imaginable features to add on my shiny application, I believe that creating a geospatial plot that covers not only cases in country level but also provincial is very interesting. When users click on a capital city of one country, it will shows information in all provinces to see in which province the outbreak is more concentrated (shown by different circle size for instance as illustrated in figure <a href="#fig:peta">5</a>). The main challenges for this is <strong>data availability</strong>. For example in my country, data for all provinces is somehow not publicly shared in a raw data format but instead just shown in a given chart (<a href="https://covid19.go.id/peta-sebaran" class="uri">https://covid19.go.id/peta-sebaran</a>). Other countries also do not provide such provincial information.</p>
+<div class="figure" style="text-align: center"><span id="fig:peta"></span>
+<img src="peta_sebaran.png" alt="Indonesia's Provincial Breakdown of Covid-19 Data" width="883" />
+<p class="caption">
+Figure 5: Indonesia’s Provincial Breakdown of Covid-19 Data
+</p>
+</div>
+<p>Another obstacle is finding geospatial data (i.e. shapefile) for forming a country’s map that can be broken down into several provinces. Assuming that the provincial covid data is available (at least for Indonesia) and required maps can be found, I would like to create additional option for users to divide regions further into several level of outbreak represented by colours (green, red and black). <code>Green</code> colour indicates that one region is considered safe with low cases, while <code>red</code> is moderate to high cases, and <code>black</code> represents very high cases and very infectious region. In fact, currently the Government of Indonesia uses the divisions to implement different measures on each regions based on their categories, for example on campus learning is allowed only for green regions. This feature can also be useful for people plan to travel to somewhere in the country.</p>
+</div>
+</div>
+<div id="bibliography" class="section level2 unnumbered">
+<h2>Bibliography</h2>
+<div id="refs" class="references">
+<div id="ref-timevis">
+<p>Attali, Dean, and Almende B.V. 2020. <em>Timevis: Create Interactive Timeline Visualizations in R</em>. <a href="https://CRAN.R-project.org/package=timevis">https://CRAN.R-project.org/package=timevis</a>.</p>
+</div>
+<div id="ref-shiny">
+<p>Chang, Winston, Joe Cheng, JJ Allaire, Yihui Xie, and Jonathan McPherson. 2020. <em>Shiny: Web Application Framework for R</em>. <a href="https://CRAN.R-project.org/package=shiny">https://CRAN.R-project.org/package=shiny</a>.</p>
+</div>
+</div>
+</div>
