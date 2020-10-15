@@ -27,7 +27,7 @@ library(timevis)
 ```
 
 
-## Background Story
+## Background Story :scroll:
 In the last mid semester break when I was still writing a book about creating a website using Hugo, I got announcement from my lecturer that the assessment for creating a shiny application was available on the course website. I headed to the website and read the instructions for the shiny assessment. Since the intention was generally about making comparison of covid-19 cases, I was thinking about making an application that shows cases development and people's mobility in several ASEAN countries.  
 
 In selecting the countries, I considered one that has moderate to high cases number of covid-19, hence Vietnam which has very low cases was not selected. One of the countries definitely must be my own country Indonesia. Other countries to pick were considered to have cases which are not extremely as low as Vietnam. Hence, I came up with 5 major ASEAN countries comprise of Indonesia, Malaysia, Singapore, Thailand and Philippines. 
